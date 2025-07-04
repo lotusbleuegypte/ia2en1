@@ -2,14 +2,13 @@ export default async function handler(req, res) {
   const prompt = req.body.prompt;
 
   try {
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    const response = await fetch("https://api.aura.markets/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "meta-llama/llama-3-8b-instruct",
+        model: "openchat/openchat-3.5-0106",
         messages: [{ role: "user", content: prompt }],
       }),
     });
