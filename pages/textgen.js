@@ -1,18 +1,25 @@
-export default async function handler(req, res) {
-  const prompt = req.body.prompt;
+import { useState } from 'react';
 
-  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer VOTRE_TOKEN_API_OPENROUTER`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "openai/gpt-3.5-turbo",
-      messages: [{ role: "user", content: prompt }],
-    }),
-  });
+export default function TextGen() {
+  const [input, setInput] = useState('');
+  const [result, setResult] = useState('');
 
-  const data = await response.json();
-  res.status(200).json({ output: data.choices[0].message.content });
+  const generate = async () => {
+    const res = await fetch('/api/textgen', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: input }),
+    });
+    const data = await res.json();
+    setResult(data.output);
+  };
+
+  return (
+    <div>
+      <h1>🧠 Générateur de texte IA</h1>
+      <textarea onChange={e => setInput(e.target.value)} />
+      <button onClick={generate}>Générer</button>
+      <pre>{result}</pre>
+    </div>
+  );
 }
