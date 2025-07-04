@@ -9,7 +9,7 @@ export default async function handler(req, res) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "mistral/mistral-7b-instruct",
+        model: "meta-llama/llama-3-8b-instruct",
         messages: [{ role: "user", content: prompt }],
       }),
     });
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!data.choices || !data.choices[0]) {
-      return res.status(500).json({ output: "⛔ IA muette. Aucune réponse reçue." });
+      return res.status(500).json({ output: "⛔ IA muette. Aucune réponse reçue.", raw: data });
     }
 
     res.status(200).json({ output: data.choices[0].message.content });
